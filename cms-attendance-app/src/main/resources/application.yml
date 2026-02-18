@@ -1,0 +1,19 @@
+server:
+  port: 9049
+
+spring:
+  datasource:
+    url: jdbc:postgresql://43.205.24.208:5432/attendance_db
+    username: postgres
+    password: pgadmin
+  jpa:
+    hibernate:
+      ddl-auto: update
+    show-sql: true
+    properties:
+      hibernate:
+        format_sql: true
+
+jwt:
+  secret: your-super-secure-secret-key
+  expiration: 3600000
