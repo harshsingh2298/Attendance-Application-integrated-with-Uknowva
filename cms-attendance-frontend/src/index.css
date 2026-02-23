@@ -1,0 +1,58 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;500&family=Raleway:wght@600;700&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+
+
+.office-card {
+  opacity: 0;
+  transform: translateY(20px);
+}
+
+.office-card.slide-in {
+  opacity: 1;
+  transform: translateY(0);
+  transition: opacity 0.5s ease, transform 0.5s ease;
+}
+
+body {
+  margin: 0;
+  font-family: -apple-system, BlinkMacSystemFont,  'Raleway',
+     'Poppins',
+    sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+code {
+  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
+    monospace;
+}
+@layer base {
+
+  table {
+  }
+  th,
+  td {
+    @apply py-3 px-2.5 text-sm text-left border-y border-gray-200;
+  }
+  thead {
+    @apply bg-neutral-100;
+  }
+  th {
+    @apply font-semibold;
+  }
+  a {
+    @apply text-zinc-500  hover:underline;
+    
+  }
+    h1, h2, h3, h4, h5, h6 {
+    @apply font-header;
+  }
+
+  body {
+    @apply font-content;
+  }
+}
