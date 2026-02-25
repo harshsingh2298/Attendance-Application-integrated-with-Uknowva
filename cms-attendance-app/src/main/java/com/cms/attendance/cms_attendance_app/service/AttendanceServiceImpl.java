@@ -52,7 +52,7 @@ public class AttendanceServiceImpl implements AttendanceService {
         attendance.setPunchOut(LocalDateTime.now());
 
         Duration duration = Duration.between(attendance.getPunchIn(), attendance.getPunchOut());
-        attendance.setTotalHours((double) duration.toHours());
+        attendance.setTotalHours(duration.toMinutes() / 60.0);
 
         return attendanceRepository.save(attendance);
     }

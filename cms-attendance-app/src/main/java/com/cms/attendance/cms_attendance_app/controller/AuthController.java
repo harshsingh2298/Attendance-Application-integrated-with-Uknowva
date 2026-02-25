@@ -1,13 +1,16 @@
 package com.cms.attendance.cms_attendance_app.controller;
 
 import com.cms.attendance.cms_attendance_app.dto.ApiResponse;
+import com.cms.attendance.cms_attendance_app.dto.AuthResponse;
 import com.cms.attendance.cms_attendance_app.dto.LoginRequest;
+import com.cms.attendance.cms_attendance_app.dto.RefreshRequest;
 import com.cms.attendance.cms_attendance_app.entity.Employee;
 import com.cms.attendance.cms_attendance_app.entity.RefreshToken;
+import com.cms.attendance.cms_attendance_app.exceptions.ResourceNotFoundException;
 import com.cms.attendance.cms_attendance_app.repository.EmployeeRepository;
 import com.cms.attendance.cms_attendance_app.repository.RefreshTokenRepository;
 import com.cms.attendance.cms_attendance_app.security.JwtUtil;
-import lombok.RequiredArgsConstructor;
+import com.cms.attendance.cms_attendance_app.service.AuthService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -18,7 +21,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.time.Instant;
-import java.time.LocalDateTime;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -29,13 +31,16 @@ public class AuthController {
 
     private final AuthenticationManager authenticationManager;
     private final JwtUtil jwtUtil;
+
+    private final AuthService authService;
     private final EmployeeRepository employeeRepository;
     private final RefreshTokenRepository refreshTokenRepository;
     private final PasswordEncoder passwordEncoder;
 
-    public AuthController(AuthenticationManager authenticationManager, JwtUtil jwtUtil, EmployeeRepository employeeRepository, RefreshTokenRepository refreshTokenRepository, PasswordEncoder passwordEncoder) {
+    public AuthController(AuthenticationManager authenticationManager, JwtUtil jwtUtil, AuthService authService, EmployeeRepository employeeRepository, RefreshTokenRepository refreshTokenRepository, PasswordEncoder passwordEncoder) {
         this.authenticationManager = authenticationManager;
         this.jwtUtil = jwtUtil;
+        this.authService = authService;
         this.employeeRepository = employeeRepository;
         this.refreshTokenRepository = refreshTokenRepository;
         this.passwordEncoder = passwordEncoder;
@@ -75,4 +80,26 @@ public class AuthController {
 
         );
     }
+
+
+    @PostMapping("/refresh")
+    public ResponseEntity<AuthResponse> refresh(@RequestBody RefreshRequest request) {
+        return ResponseEntity.ok(authService.refreshToken(request));
+    }
+
+
+    @PostMapping("/logout")
+    public ResponseEntity<?> logout(@RequestBody RefreshRequest request) {
+
+        RefreshToken token = refreshTokenRepository
+                .findByToken(request.getRefreshToken())
+                .orElseThrow(() -> new ResourceNotFoundException("Token not found"));
+
+        token.setRevoked(true);
+        refreshTokenRepository.save(token);
+
+        return ResponseEntity.ok("Logged out successfully");
+    }
+
+
 }

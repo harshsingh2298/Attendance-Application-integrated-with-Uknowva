@@ -1,5 +1,6 @@
 package com.cms.attendance.cms_attendance_app.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -23,6 +24,7 @@ public class Attendance {
 
     @ManyToOne
     @JoinColumn(name = "emp_id")
+    @JsonIgnore
     private Employee employee;
 
     private LocalDate attendanceDate;

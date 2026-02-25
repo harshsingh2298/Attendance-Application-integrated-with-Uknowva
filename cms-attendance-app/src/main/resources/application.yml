@@ -9,11 +9,14 @@ spring:
   jpa:
     hibernate:
       ddl-auto: update
-    show-sql: true
-    properties:
-      hibernate:
-        format_sql: true
+    show-sql: false
+  jackson:
+    serialization:
+      fail-on-empty-beans: false
 
 jwt:
-  secret: your-super-secure-secret-key
+  secret: moOXvdGYZYWKuHAtzFQIpOqaKif8lmG0nGjtPSP+utQ=
   expiration: 3600000
+
+
+
