@@ -27,8 +27,9 @@ public class Employee {
     private String lastName;
     private String email;
     private String password;
-
+    private String project;
     private String department;
+
     private String seniorId;
 
     private boolean status;
@@ -74,6 +75,14 @@ public class Employee {
 
     public void setEmail(String email) {
         this.email = email;
+    }
+
+    public String getProject() {
+        return project;
+    }
+
+    public void setProject(String project) {
+        this.project = project;
     }
 
     public String getPassword() {

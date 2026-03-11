@@ -1,29 +1,55 @@
-const AttendanceTable = () => {
-  return (
-    <div className="bg-white shadow-md rounded-xl overflow-hidden">
+const AttendanceTable = ({ data = [] }) => {
 
-      <table className="w-full text-sm text-left">
-        <thead className="bg-gray-50 border-b">
-          <tr>
-            <th className="p-4">Employee</th>
-            <th className="p-4">Date</th>
-            <th className="p-4">Punch In</th>
-            <th className="p-4">Punch Out</th>
-            <th className="p-4">Status</th>
+  const calculateHours = (checkIn, checkOut) => {
+    if (!checkIn || !checkOut) return "0h";
+
+    const to24Hour = (time) => {
+      const [timePart, modifier] = time.split(" ");
+      let [hours, minutes] = timePart.split(":");
+      if (modifier === "PM" && hours !== "12") {
+        hours = parseInt(hours, 10) + 12;
+      }
+      if (modifier === "AM" && hours === "12") {
+        hours = "00";
+      }
+      return `${hours}:${minutes}`;
+    };
+
+    const start = new Date(`1970-01-01T${to24Hour(checkIn)}:00`);
+    const end = new Date(`1970-01-01T${to24Hour(checkOut)}:00`);
+
+    const diffMs = end - start;
+    const diffHrs = diffMs / (1000 * 60 * 60);
+
+    return diffHrs.toFixed(2) + " hrs";
+  };
+
+  return (
+    <div className="bg-white shadow rounded-lg p-4">
+      <table className="min-w-full">
+        <thead>
+          <tr className="border-b">
+            <th>Name</th>
+            <th>Date</th>
+            <th>Punch In</th>
+            <th>Punch Out</th>
+            <th>Total Hours</th>
+            <th>Status</th>
           </tr>
         </thead>
-
         <tbody>
-          <tr className="border-b hover:bg-gray-50 transition">
-            <td className="p-4">Harsh</td>
-            <td className="p-4">2026-02-18</td>
-            <td className="p-4">09:10 AM</td>
-            <td className="p-4">06:20 PM</td>
-            <td className="p-4 text-green-600 font-medium">Present</td>
-          </tr>
+          {data.map((emp) => (
+            <tr key={emp.employeeId} className="border-b">
+              <td>{emp.name}</td>
+              <td>{emp.date}</td>
+              <td>{emp.checkIn || "-"}</td>
+              <td>{emp.checkOut || "-"}</td>
+              <td>{calculateHours(emp.checkIn, emp.checkOut)}</td>
+              <td>{emp.status}</td>
+            </tr>
+          ))}
         </tbody>
       </table>
-
     </div>
   );
 };
