@@ -1,4 +1,5 @@
 package com.cms.attendance.cms_attendance_app.repository;
+
 import com.cms.attendance.cms_attendance_app.entity.Role;
 import org.springframework.data.jpa.repository.JpaRepository;
 

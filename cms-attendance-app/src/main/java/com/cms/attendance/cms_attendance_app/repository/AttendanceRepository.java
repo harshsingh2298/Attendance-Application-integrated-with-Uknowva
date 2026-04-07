@@ -13,5 +13,7 @@ public interface AttendanceRepository extends JpaRepository<Attendance, Long> {
 
     List<Attendance> findByEmployeeEmpCode(String empCode);
 
+
+
     List<Attendance> findByEmployeeSeniorId(String seniorId);
 }

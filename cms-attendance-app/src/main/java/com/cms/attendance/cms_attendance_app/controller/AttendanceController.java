@@ -16,10 +16,10 @@ public class AttendanceController {
 
     private final AttendanceService attendanceService;
 
+    // ── EMPLOYEE ─────────────────────────────────────────
     @PreAuthorize("hasRole('EMPLOYEE')")
     @PostMapping("/punch-in")
-    public ResponseEntity<?> punchIn(@Parameter(hidden = true) Authentication auth
-    ) {
+    public ResponseEntity<?> punchIn(@Parameter(hidden = true) Authentication auth) {
         return ResponseEntity.ok(attendanceService.punchIn(auth.getName()));
     }
 
@@ -35,17 +35,27 @@ public class AttendanceController {
         return ResponseEntity.ok(attendanceService.getMyAttendance(auth.getName()));
     }
 
+    // ── MANAGER ──────────────────────────────────────────
     @PreAuthorize("hasRole('MANAGER')")
     @GetMapping("/senior")
     public ResponseEntity<?> senior(Authentication auth) {
         return ResponseEntity.ok(attendanceService.getSeniorAttendance(auth.getName()));
     }
 
+    /**
+     * Manager: search any team member's 1-month attendance by empCode
+     * GET /attendance/search?empCode=EMP001
+     */
+    @PreAuthorize("hasRole('MANAGER') or hasRole('ADMIN')")
+    @GetMapping("/search")
+    public ResponseEntity<?> searchByEmpCode(@RequestParam String empCode) {
+        return ResponseEntity.ok(attendanceService.getAttendanceByEmpCode(empCode));
+    }
+
+    // ── ADMIN ─────────────────────────────────────────────
     @PreAuthorize("hasRole('ADMIN')")
     @GetMapping("/all")
     public ResponseEntity<?> all() {
         return ResponseEntity.ok(attendanceService.getAllAttendance());
     }
 }
-
-

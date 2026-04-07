@@ -71,4 +71,6 @@ public class AttendanceServiceImpl implements AttendanceService {
     public List<Attendance> getAllAttendance() {
         return attendanceRepository.findAll();
     }
+
+
 }
